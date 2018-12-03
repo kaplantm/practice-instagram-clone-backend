@@ -14,9 +14,13 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "postId",
       onDelete: "CASCADE"
     });
+    Comment.belongsTo(models.User, {
+      foreignKey: "userId",
+      onDelete: "CASCADE"
+    });
   };
   return Comment;
 };
 
-// The onDelete: CASCADE tells Postgres that if we delete a todo,
-// it's associated todo items should be deleted as well (cascade the delete action).
+// The onDelete: CASCADE tells Postgres that if we delete a post,
+// it's associated comments should be deleted as well (cascade the delete action).

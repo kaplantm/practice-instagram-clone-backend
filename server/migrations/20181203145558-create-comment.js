@@ -32,6 +32,15 @@ module.exports = {
           key: "id",
           as: "postId"
         }
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        onDelete: "CASCADE",
+        references: {
+          model: "Users",
+          key: "id",
+          as: "userId"
+        }
       }
     });
   },
@@ -47,8 +56,8 @@ module.exports = {
 // the migration.
 
 // These migrations are a representation of how we want our models to look like in the database.
-// Notice we define the relationship between our models in the create-todo-item.js migration file
-// as well. The todoId field was not automatically generated and we've had to manually define it.
+// Notice we define the relationship between our models in the create-comment.js migration file
+// as well. The postId field was not automatically generated and we've had to manually define it.
 // Sequelize automatically generates the id, createdAt and updatedAt fields for you. In addition
 // to that, any time a model is saved, the updatedAt field is automatically updated to reflect the
 // new update time.
