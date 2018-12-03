@@ -31,7 +31,7 @@ module.exports = {
   },
 
   get_one(req, res) {
-    return Post.findById(req.params.postId, {
+    return Post.findByPk(req.params.postId, {
       include: [
         {
           model: Comment,
@@ -51,14 +51,7 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
   patch_update(req, res) {
-    return Post.findById(req.params.postId, {
-      include: [
-        {
-          model: Comment,
-          as: "comments"
-        }
-      ]
-    })
+    return Post.findByPk(req.params.postId)
       .then(post => {
         if (!post) {
           return res.status(404).send({
@@ -88,14 +81,7 @@ module.exports = {
       req.body.caption &&
       req.body.userId
     ) {
-      return Post.findById(req.params.postId, {
-        include: [
-          {
-            model: Comment,
-            as: "comments"
-          }
-        ]
-      })
+      return Post.findByPk(req.params.postId)
         .then(post => {
           if (!post) {
             return res.status(404).send({
@@ -121,7 +107,7 @@ module.exports = {
     }
   },
   delete(req, res) {
-    return Post.findById(req.params.postId)
+    return Post.findByPk(req.params.postId)
       .then(post => {
         if (!post) {
           return res.status(404).send({
@@ -130,7 +116,7 @@ module.exports = {
         }
         return post
           .destroy()
-          .then(() => res.status(200).send("Post Deleted"))
+          .then(() => res.status(200).send({ message: "User Deleted" }))
           .catch(error => res.status(400).send(error));
       })
       .catch(error => res.status(400).send(error));

@@ -47,7 +47,6 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
   delete(req, res) {
-    console.log("here1");
     return Comment.findOne({
       where: {
         id: req.params.commentId,
@@ -55,7 +54,6 @@ module.exports = {
       }
     })
       .then(Comment => {
-        console.log("here1");
         if (!Comment) {
           return res.status(404).send({
             message: "Comment Not Found"

@@ -3,8 +3,10 @@
 
 const comments = require("./commentsController");
 const posts = require("./postsController");
+const users = require("./usersController");
 
 module.exports = {
   posts,
-  comments
+  comments,
+  users
 };
