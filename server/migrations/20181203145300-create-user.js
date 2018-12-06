@@ -18,6 +18,11 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
+      },
+      avatar: {
+        type: Sequelize.STRING,
         allowNull: false
       },
       createdAt: {

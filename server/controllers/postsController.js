@@ -1,46 +1,72 @@
 const Post = require("../models").Post;
 const Comment = require("../models").Comment;
+const User = require("../models").User;
+const helper = require("./helpers/helper");
 
 module.exports = {
   create(req, res) {
-    return Post.create({
-      title: req.body.title,
-      userId: req.body.userId,
-      image_url: req.body.image_url,
-      caption: req.body.caption
+    return User.findOne({
+      where: {
+        id: req.params.userId
+      }
     })
-      .then(post => res.status(201).send(post))
+      .then(user => {
+        if (user) {
+          return Post.create({
+            title: req.body.title,
+            userId: req.params.userId,
+            image_url: req.body.image_url,
+            caption: req.body.caption
+          })
+            .then(post => res.status(201).send(post))
+            .catch(error => res.status(400).send(error));
+        } else {
+          res.status(404).send({
+            message: "User Not Found"
+          });
+        }
+      })
+      .catch(error => res.status(500).send(error));
+  },
+
+  get_all_by_user(req, res) {
+    return Post.findAll({
+      include: helper.includes(req.query.include, User, Comment),
+      order: [helper.sort(req.query.sort, Post)],
+      where: { userId: req.params.userId }
+    })
+      .then(posts => {
+        if (posts.length > 0) {
+          res.status(200).send(posts);
+        } else {
+          res.status(404).send({ message: "No posts found." });
+        }
+      })
       .catch(error => res.status(400).send(error));
   },
-  get_all(req, res) {
-    posts =
-      req.query.include == "comments"
-        ? Post.findAll({
-            include: [
-              {
-                model: Comment,
-                as: "comments"
-              }
-            ]
-          })
-        : Post.findAll();
 
-    return posts
-      .then(post => res.status(200).send(post))
+  get_all(req, res) {
+    return Post.findAll({
+      include: helper.includes(req.query.include, User, Comment),
+      order: [helper.sort(req.query.sort, Post)]
+    })
+      .then(posts => {
+        if (posts.length > 0) {
+          res.status(200).send(posts);
+        } else {
+          res.status(404).send({ message: "No posts found." });
+        }
+      })
       .catch(error => res.status(400).send(error));
   },
 
   get_one(req, res) {
-    return Post.findByPk(req.params.postId, {
-      include: [
-        {
-          model: Comment,
-          as: "comments"
-        }
-      ]
+    console.log(req.params.userId);
+    return Post.findOne({
+      include: helper.includes(req.query.include, User, Comment),
+      where: { id: req.params.postId, userId: req.params.userId }
     })
       .then(post => {
-        console.log(post);
         if (!post) {
           return res.status(404).send({
             message: "Post Not Found"
@@ -50,6 +76,7 @@ module.exports = {
       })
       .catch(error => res.status(400).send(error));
   },
+
   patch_update(req, res) {
     return Post.findByPk(req.params.postId)
       .then(post => {
@@ -74,6 +101,7 @@ module.exports = {
       })
       .catch(error => res.status(400).send(error));
   },
+
   put_update(req, res) {
     if (
       req.body.title &&
@@ -106,6 +134,7 @@ module.exports = {
       });
     }
   },
+
   delete(req, res) {
     return Post.findByPk(req.params.postId)
       .then(post => {
@@ -116,7 +145,7 @@ module.exports = {
         }
         return post
           .destroy()
-          .then(() => res.status(200).send({ message: "User Deleted" }))
+          .then(() => res.status(200).send({ message: "Post Deleted" }))
           .catch(error => res.status(400).send(error));
       })
       .catch(error => res.status(400).send(error));

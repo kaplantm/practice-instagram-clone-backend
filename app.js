@@ -14,6 +14,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+//for image uploads
+app.use("/uploads", express.static("uploads"));
+
 require("./server/routes")(app);
 app.get("*", (req, res) =>
   res.status(200).send({

@@ -10,14 +10,17 @@ const fs = require("fs");
 const path = require("path");
 const Sequelize = require("sequelize");
 const basename = path.basename(module.filename);
-const env = process.env.NODE_ENV || "development";
+const dotenv = require("dotenv").config();
+const env = process.env.NODE_ENV || "production";
 const config = require(`${__dirname}/../config/config`)[env];
 const db = {};
-
+console.log(env);
 let sequelize;
-const Op = Sequelize.Op;
+
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable]);
+  sequelize = new Sequelize(process.env[config.use_env_variable], {
+    operatorsAliases: Sequelize.Op
+  });
 } else {
   sequelize = new Sequelize(
     config.database,
