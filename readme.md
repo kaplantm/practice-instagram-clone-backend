@@ -1,4 +1,4 @@
-Backend for my instagram clone react native practice app. Learning more about how to make a REST API.
+Node API backend for my instagram clone react native practice app. Learning more about how to make REST APIs.
 API connects to postgres database and includes routes for users, posts and comments.
 
 Using express, sequelize, bcrypt, jsonwebtoken
