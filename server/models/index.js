@@ -14,7 +14,7 @@ const dotenv = require("dotenv").config();
 const env = process.env.NODE_ENV || "production";
 const config = require(`${__dirname}/../config/config`)[env];
 const db = {};
-console.log(env);
+
 let sequelize;
 
 if (config.use_env_variable) {

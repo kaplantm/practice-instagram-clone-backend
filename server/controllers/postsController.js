@@ -3,6 +3,8 @@ const Comment = require("../models").Comment;
 const User = require("../models").User;
 const helper = require("./helpers/helper");
 
+//right now when "user" in included in posts all user data is sent back - including emails and passwords (encrypted)
+//should create separate public facing user profile data table including username, userid, other public user info
 module.exports = {
   create(req, res) {
     return User.findOne({
@@ -30,10 +32,14 @@ module.exports = {
   },
 
   get_all_by_user(req, res) {
+    let offset = req.query.offset || 0;
+    let limit = req.query.limit || 20;
     return Post.findAll({
       include: helper.includes(req.query.include, User, Comment),
       order: [helper.sort(req.query.sort, Post)],
-      where: { userId: req.params.userId }
+      where: { userId: req.params.userId },
+      offset: offset,
+      limit: limit
     })
       .then(posts => {
         if (posts.length > 0) {
@@ -46,9 +52,13 @@ module.exports = {
   },
 
   get_all(req, res) {
+    let offset = req.query.offset || 0;
+    let limit = req.query.limit || 20;
     return Post.findAll({
       include: helper.includes(req.query.include, User, Comment),
-      order: [helper.sort(req.query.sort, Post)]
+      order: [helper.sort(req.query.sort, Post)],
+      offset: offset,
+      limit: limit
     })
       .then(posts => {
         if (posts.length > 0) {
@@ -61,10 +71,13 @@ module.exports = {
   },
 
   get_one(req, res) {
-    console.log(req.params.userId);
+    let offset = req.query.offset || 0;
+    let limit = req.query.limit || 20;
     return Post.findOne({
       include: helper.includes(req.query.include, User, Comment),
-      where: { id: req.params.postId, userId: req.params.userId }
+      where: { id: req.params.postId, userId: req.params.userId },
+      offset: offset,
+      limit: limit
     })
       .then(post => {
         if (!post) {
@@ -92,7 +105,7 @@ module.exports = {
             //   image_url: req.body.image_url || post.image_url,
             //   caption: req.body.caption || post.caption
             // })
-            //below is a much more scalable version of the or statements above
+            //below is a much more scalable version of the statements above
             .update(req.body, { fields: Object.keys(req.body) })
 
             .then(() => res.status(200).send(post)) // Send back the updated post.
@@ -150,20 +163,9 @@ module.exports = {
       })
       .catch(error => res.status(400).send(error));
   }
-  // list_all_with_comments(req, res) {
-  //   return Post.findAll({
-  //     include: [
-  //       {
-  //         model: Comment,
-  //         as: "comments"
-  //       }
-  //     ]
-  //   })
-  //     .then(post => res.status(200).send(post))
-  //     .catch(error => res.status(400).send(error));
-  // }
 };
 
+//https://scotch.io/tutorials/getting-started-with-node-express-and-postgres-using-sequelize
 // This create function is designed to be a route handler for whichever Express route we'll choose to attach
 // it to. The req parameter is the incoming request from the client. The res parameter is the response we're
 // preparing to eventually send back to the client in response to their request :). All Express route

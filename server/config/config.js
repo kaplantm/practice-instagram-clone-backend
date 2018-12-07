@@ -4,7 +4,6 @@
 // also had to change config path in .sequelizerc
 const dotenv = require("dotenv").config();
 const Sequelize = require("sequelize");
-// console.log(process.env.DATABASE_URL);
 module.exports = {
   // use_env_variable: "production",
   development: {
@@ -35,4 +34,5 @@ module.exports = {
   }
 };
 
-//sequelize db:migrate NODE_ENV=production DATABASE_URL=postgres://jlivnzjh:Ixzf5atFKIdnLyO6pxXYgFnwgGDIY8L9@baasu.db.elephantsql.com:5432/jlivnzjh
+//if .env not working:
+//sequelize db:migrate NODE_ENV=production DATABASE_URL=(url)

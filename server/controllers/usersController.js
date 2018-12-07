@@ -4,14 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
-  // login(req, res) {
-  //   return res.status(200).json({
-  //     login: true
-  //   });
-  // },
-
   login(req, res) {
-    console.log(req.body);
     User.findOne({
       where: {
         email: req.body.email
@@ -39,14 +32,14 @@ module.exports = {
 
               const token = jwt.sign(user_data, process.env.JWT_KEY, {
                 // expiresIn: "900s" //token is valid for 15 minutes
-                expiresIn: "40s" //for testing, valid for 5 minutes
+                // expiresIn: "40s"
               });
 
               const refresh_token = jwt.sign(
                 user_data,
                 process.env.JWT_REFRESH_KEY,
-                // { expiresIn: "7d" } //refresh is valid for seven days
-                { expiresIn: "120s" } //refresh is valid for seven days
+                { expiresIn: "7d" } //refresh is valid for seven days
+                // { expiresIn: "120s" }
               );
               return res.status(200).json({
                 message: "Login Successful",

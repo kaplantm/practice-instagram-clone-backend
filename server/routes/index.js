@@ -35,7 +35,7 @@ module.exports = app => {
 
   //adds header to prevent cors errors
   //asterisks could be replaces to url to limit usage to known sites
-  //but tools like postman would still be able to
+  //but tools like postman would still be able to query api
   app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
@@ -99,14 +99,13 @@ module.exports = app => {
 
 //TODO
 // JWT refresh
+// change scrollview to flat list and implement load more on hit bottom
 // login on ios
 // save token on ios
 //test refresh (set time lower than 1hr)
 //TODO password length restrictions (back and front end)
 //valid email restrictions (back and front end)
 //TODO
-//http://tkaplan101518.local:4000/api/posts/?sort=createdAt&include=user
-//get comments showing in react native app
 //Pagination? (in react native) - how to trigger and get more, append to curernt lists of posts?
 //then api testing (switch to dev)
 //ADJUST BACKEND TO ONLY SAVE RELATIVE PATH OF UPLOADS - important for moving api to new server later
